@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['email'] = $user['email'];
             $_SESSION['role'] = $user['role'];
             
-            // Redirect based on role
             if ($user['role'] === 'admin') {
                 header('Location: /electrastore/admin/index.php');
             } else {
@@ -53,18 +52,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="email" name="email" required>
         </div>
         
-        <div class="form-group">
+        <div class="form-group password-field">
             <label>Password</label>
-            <input type="password" name="password" required>
+            <div class="password-input-wrapper">
+                <input type="password" name="password" id="password" required>
+                <span class="password-toggle" onclick="togglePassword('password')">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
         </div>
         
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+        <button type="submit" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center;">Login</button>
     </form>
     
     <p style="text-align: center; margin-top: 1rem;">
         Don't have an account? <a href="register.php">Register here</a>
     </p>
 </div>
+
+<script>
+function togglePassword(inputId) {
+    const passwordInput = document.getElementById(inputId);
+    const eyeIcon = passwordInput.nextElementSibling.querySelector('i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    }
+}
+</script>
 
 <?php
 require_once '../includes/footer.php';

@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = trim($_POST['phone'] ?? '');
     $address = trim($_POST['address'] ?? '');
     
-    // Validation
     if (empty($full_name) || empty($email) || empty($password)) {
         $error = 'Please fill in all required fields';
     } elseif ($password !== $confirm_password) {
@@ -27,20 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $conn = getConnection();
         
-        // Check if email exists
         $stmt = $conn->prepare("SELECT user_id FROM users WHERE email = ?");
         $stmt->execute([$email]);
         
         if ($stmt->fetch()) {
             $error = 'Email already registered';
         } else {
-            // Insert new user
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $conn->prepare("INSERT INTO users (full_name, email, password, phone, address) VALUES (?, ?, ?, ?, ?)");
             
             if ($stmt->execute([$full_name, $email, $hashed_password, $phone, $address])) {
                 $success = 'Registration successful! You can now login.';
-                // Clear form
                 $full_name = $email = $phone = $address = '';
             } else {
                 $error = 'Registration failed. Please try again.';
@@ -72,15 +68,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="email" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
         </div>
         
-        <div class="form-group">
+        <div class="form-group password-field">
             <label>Password *</label>
-            <input type="password" name="password" required>
+            <div class="password-input-wrapper">
+                <input type="password" name="password" id="password" required>
+                <span class="password-toggle" onclick="togglePassword('password')">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
             <small>At least 6 characters</small>
         </div>
         
-        <div class="form-group">
+        <div class="form-group password-field">
             <label>Confirm Password *</label>
-            <input type="password" name="confirm_password" required>
+            <div class="password-input-wrapper">
+                <input type="password" name="confirm_password" id="confirm_password" required>
+                <span class="password-toggle" onclick="togglePassword('confirm_password')">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
         </div>
         
         <div class="form-group">
@@ -93,13 +99,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <textarea name="address"><?php echo htmlspecialchars($address ?? ''); ?></textarea>
         </div>
         
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+        <button type="submit" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center;">Register</button>
     </form>
     
     <p style="text-align: center; margin-top: 1rem;">
         Already have an account? <a href="login.php">Login here</a>
     </p>
 </div>
+
+<script>
+function togglePassword(inputId) {
+    const passwordInput = document.getElementById(inputId);
+    const eyeIcon = passwordInput.nextElementSibling.querySelector('i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    }
+}
+</script>
 
 <?php
 require_once '../includes/footer.php';
