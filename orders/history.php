@@ -2,7 +2,7 @@
 require_once '../includes/header.php';
 
 if (!isLoggedIn()) {
-    header('Location: /electrastore/user/login.php');
+    header('Location: /app/electrastore/user/login.php');
     exit();
 }
 
@@ -35,7 +35,7 @@ $orders = $stmt->fetchAll();
                 </div>
                 <h3>No Orders Yet</h3>
                 <p>You haven't placed any orders yet. Start shopping to see your orders here.</p>
-                <a href="/electrastore/products/index.php" class="btn btn-primary">
+                <a href="/app/electrastore/products/index.php" class="btn btn-primary">
                     <i class="fas fa-store"></i> Start Shopping
                 </a>
             </div>
@@ -107,7 +107,7 @@ $orders = $stmt->fetchAll();
                                 <tr>
                                     <td class="product-info-cell">
                                         <div class="order-product-info">
-                                            <img src="/electrastore/assets/images/products/<?php echo htmlspecialchars($item['image_url'] ?: 'placeholder.jpg'); ?>" 
+                                            <img src="/app/electrastore/assets/images/products/<?php echo htmlspecialchars($item['image_url'] ?: 'placeholder.jpg'); ?>" 
                                                  alt="<?php echo htmlspecialchars($item['product_name']); ?>"
                                                  class="order-product-image">
                                             <div class="order-product-details">

@@ -2,7 +2,7 @@
 require_once '../includes/header.php';
 
 if (!isLoggedIn()) {
-    header('Location: /electrastore/user/login.php');
+    header('Location: /app/electrastore/user/login.php');
     exit();
 }
 
@@ -18,7 +18,7 @@ $stmt->execute([$cart_id]);
 $cart_items = $stmt->fetchAll();
 
 if (count($cart_items) == 0) {
-    header('Location: /electrastore/cart/index.php');
+    header('Location: /app/electrastore/cart/index.php');
     exit();
 }
 
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     if ($success) {
-        header('Location: /electrastore/orders/history.php?success=1');
+        header('Location: /app/electrastore/orders/history.php?success=1');
         exit();
     }
 }

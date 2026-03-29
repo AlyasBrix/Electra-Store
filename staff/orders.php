@@ -1,6 +1,15 @@
 <?php
 require_once '../includes/header.php';
-requireAdmin();
+
+if (!isLoggedIn()) {
+    header('Location: /app/electrastore/user/login.php');
+    exit();
+}
+
+if (!isAdmin() && $_SESSION['role'] != 'staff') {
+    header('Location: /app/electrastore/index.php');
+    exit();
+}
 
 $conn = getConnection();
 
@@ -11,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     
     $stmt = $conn->prepare("UPDATE orders SET order_status = ? WHERE order_id = ?");
     $stmt->execute([$status, $order_id]);
-    $_SESSION['message'] = "Order status updated successfully!";
+    $_SESSION['message'] = "Order status updated!";
     $_SESSION['message_type'] = 'success';
 }
 
@@ -25,7 +34,6 @@ $orders = $stmt->fetchAll();
 
 // View single order
 $view_order = null;
-$order_items = [];
 if (isset($_GET['view'])) {
     $order_id = (int)$_GET['view'];
     $stmt = $conn->prepare("SELECT o.*, u.full_name, u.email, u.phone 
@@ -49,12 +57,11 @@ if (isset($_GET['view'])) {
 <div class="container">
     <h2>Manage Orders</h2>
     
-    <div class="admin-menu">
-        <a href="/app/electrastore/admin/index.php">Dashboard</a>
-        <a href="/app/electrastore/admin/products.php">Manage Products</a>
-        <a href="/app/electrastore/admin/categories.php">Manage Categories</a>
-        <a href="/app/electrastore/admin/orders.php">Manage Orders</a>
-        <a href="/app/electrastore/admin/users.php">Manage Users</a>
+    <div class="staff-menu" style="margin-bottom: 2rem;">
+        <a href="/app/electrastore/staff/index.php" style="display: inline-block; padding: 0.5rem 1rem; background: #34495e; color: white; text-decoration: none; border-radius: 5px; margin-right: 0.5rem;">Dashboard</a>
+        <a href="/app/electrastore/staff/orders.php" style="display: inline-block; padding: 0.5rem 1rem; background: #3498db; color: white; text-decoration: none; border-radius: 5px; margin-right: 0.5rem;">Manage Orders</a>
+        <a href="/app/electrastore/staff/products.php" style="display: inline-block; padding: 0.5rem 1rem; background: #34495e; color: white; text-decoration: none; border-radius: 5px; margin-right: 0.5rem;">View Products</a>
+        <a href="/app/electrastore/staff/customers.php" style="display: inline-block; padding: 0.5rem 1rem; background: #34495e; color: white; text-decoration: none; border-radius: 5px;">View Customers</a>
     </div>
     
     <?php if (isset($_SESSION['message'])): ?>
@@ -129,44 +136,40 @@ if (isset($_GET['view'])) {
         </div>
         
     <?php else: ?>
-        <?php if (count($orders) == 0): ?>
-            <p>No orders found.</p>
-        <?php else: ?>
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($orders as $order): ?>
-                    <tr>
-                        <td>#<?php echo $order['order_id']; ?></td>
-                        <td><?php echo htmlspecialchars($order['full_name']); ?></td>
-                        <td>₱<?php echo number_format($order['total_amount'], 2); ?></td>
-                        <td>
-                            <span style="background: <?php 
-                                echo $order['order_status'] == 'Pending' ? '#f39c12' : 
-                                    ($order['order_status'] == 'Processing' ? '#3498db' : 
-                                    ($order['order_status'] == 'Completed' ? '#27ae60' : '#e74c3c')); 
-                            ?>; color: white; padding: 0.2rem 0.5rem; border-radius: 3px;">
-                                <?php echo $order['order_status']; ?>
-                            </span>
-                        </td>
-                        <td><?php echo date('M j, Y', strtotime($order['order_date'])); ?></td>
-                        <td>
-                            <a href="?view=<?php echo $order['order_id']; ?>" class="edit-btn">View</a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($orders as $order): ?>
+                <tr>
+                    <td>#<?php echo $order['order_id']; ?></td>
+                    <td><?php echo htmlspecialchars($order['full_name']); ?></td>
+                    <td>₱<?php echo number_format($order['total_amount'], 2); ?></td>
+                    <td>
+                        <span style="background: <?php 
+                            echo $order['order_status'] == 'Pending' ? '#f39c12' : 
+                                ($order['order_status'] == 'Processing' ? '#3498db' : 
+                                ($order['order_status'] == 'Completed' ? '#27ae60' : '#e74c3c')); 
+                        ?>; color: white; padding: 0.2rem 0.5rem; border-radius: 3px;">
+                            <?php echo $order['order_status']; ?>
+                        </span>
+                    </td>
+                    <td><?php echo date('M j, Y', strtotime($order['order_date'])); ?></td>
+                    <td>
+                        <a href="?view=<?php echo $order['order_id']; ?>" class="edit-btn">View & Update</a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     <?php endif; ?>
 </div>
 

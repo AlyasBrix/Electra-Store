@@ -2,7 +2,7 @@
 require_once '../includes/header.php';
 
 if (isLoggedIn()) {
-    header('Location: /electrastore/index.php');
+    header('Location: /app/electrastore/index.php');
     exit();
 }
 

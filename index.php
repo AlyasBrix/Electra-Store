@@ -24,7 +24,7 @@ $products = $stmt->fetchAll();
                 Quality products, competitive prices, and excellent service.
             </p>
             <div class="hero-buttons">
-                <a href="/electrastore/products/index.php" class="btn-hero-primary">
+                <a href="/app/electrastore/products/index.php" class="btn-hero-primary">
                     <i class="fas fa-shopping-bag"></i> Shop Now
                 </a>
             </div>
@@ -95,10 +95,10 @@ $products = $stmt->fetchAll();
             <?php foreach ($products as $product): ?>
             <div class="product-card-modern">
                 <div class="product-image-modern">
-                    <img src="/electrastore/assets/images/products/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
+                    <img src="/app/electrastore/assets/images/products/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
                          alt="<?php echo htmlspecialchars($product['product_name']); ?>">
                     <div class="product-actions">
-                        <a href="/electrastore/products/details.php?id=<?php echo $product['product_id']; ?>" class="action-btn quick-view-btn">
+                        <a href="/app/electrastore/products/details.php?id=<?php echo $product['product_id']; ?>" class="action-btn quick-view-btn">
                             <i class="fas fa-eye"></i>
                         </a>
                         <?php if (isLoggedIn() && $product['stock'] > 0): ?>
@@ -106,7 +106,7 @@ $products = $stmt->fetchAll();
                                 <i class="fas fa-shopping-cart"></i>
                             </button>
                         <?php elseif (!isLoggedIn()): ?>
-                            <a href="/electrastore/user/login.php" class="action-btn login-btn">
+                            <a href="/app/electrastore/user/login.php" class="action-btn login-btn">
                                 <i class="fas fa-lock"></i>
                             </a>
                         <?php endif; ?>
@@ -115,7 +115,7 @@ $products = $stmt->fetchAll();
                 <div class="product-info-modern">
                     <div class="product-category"><?php echo htmlspecialchars($product['brand'] ?: 'Generic'); ?></div>
                     <h3 class="product-title-modern">
-                        <a href="/electrastore/products/details.php?id=<?php echo $product['product_id']; ?>">
+                        <a href="/app/electrastore/products/details.php?id=<?php echo $product['product_id']; ?>">
                             <?php echo htmlspecialchars($product['product_name']); ?>
                         </a>
                     </h3>
@@ -128,7 +128,7 @@ $products = $stmt->fetchAll();
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
                         <?php else: ?>
-                            <a href="/electrastore/user/login.php" class="add-to-cart-modern login-to-buy">
+                            <a href="/app/electrastore/user/login.php" class="add-to-cart-modern login-to-buy">
                                 <i class="fas fa-lock"></i> Login to Buy
                             </a>
                         <?php endif; ?>
@@ -143,7 +143,7 @@ $products = $stmt->fetchAll();
         </div>
         
         <div class="view-all-container">
-            <a href="/electrastore/products/index.php" class="btn-view-all">
+            <a href="/app/electrastore/products/index.php" class="btn-view-all">
                 View All Products <i class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -182,7 +182,7 @@ $products = $stmt->fetchAll();
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('/electrastore/assets/images/hero-bg.jpg');
+    background-image: url('/app/electrastore/assets/images/hero-bg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

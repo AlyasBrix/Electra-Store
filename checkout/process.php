@@ -4,7 +4,7 @@ require_once '../config/database.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /electrastore/user/login.php');
+    header('Location: /app/electrastore/user/login.php');
     exit();
 }
 
@@ -22,7 +22,7 @@ $cart_items = $stmt->fetchAll();
 
 // Check if cart is empty
 if (count($cart_items) == 0) {
-    header('Location: /electrastore/cart/index.php');
+    header('Location: /app/electrastore/cart/index.php');
     exit();
 }
 
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['last_order_total'] = $grand_total;
             
             // Redirect to success page
-            header('Location: /electrastore/checkout/success.php');
+            header('Location: /app/electrastore/checkout/success.php');
             exit();
             
         } catch (Exception $e) {
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - ElectraStore</title>
-    <link rel="stylesheet" href="/electrastore/assets/css/style.css">
+    <link rel="stylesheet" href="/app/electrastore/assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container">
             <!-- Header -->
             <div class="checkout-header">
-                <a href="/electrastore/cart/index.php" class="back-to-cart">
+                <a href="/app/electrastore/cart/index.php" class="back-to-cart">
                     <i class="fas fa-arrow-left"></i> Back to Cart
                 </a>
                 <h1>Checkout</h1>

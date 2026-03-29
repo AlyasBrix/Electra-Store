@@ -3,7 +3,7 @@ require_once '../includes/header.php';
 
 // Check if user is logged in
 if (!isLoggedIn()) {
-    header('Location: /electrastore/user/login.php');
+    header('Location: /app/electrastore/user/login.php');
     exit();
 }
 
@@ -191,14 +191,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                                 <?php echo $order['order_status']; ?>
                             </span>
                         </div>
-                        <a href="/electrastore/orders/history.php?view=<?php echo $order['order_id']; ?>" class="view-order">View Details →</a>
+                        <a href="/app/electrastore/orders/history.php?view=<?php echo $order['order_id']; ?>" class="view-order">View Details →</a>
                     </div>
                     <?php endforeach; ?>
                 </div>
-                <a href="/electrastore/orders/history.php" class="view-all-orders">View All Orders →</a>
+                <a href="/app/electrastore/orders/history.php" class="view-all-orders">View All Orders →</a>
             <?php else: ?>
                 <p class="no-orders">You haven't placed any orders yet.</p>
-                <a href="/electrastore/products/index.php" class="btn btn-outline" style="margin-top: 1rem;">Start Shopping</a>
+                <a href="/app/electrastore/products/index.php" class="btn btn-outline" style="margin-top: 1rem;">Start Shopping</a>
             <?php endif; ?>
         </div>
     </div>

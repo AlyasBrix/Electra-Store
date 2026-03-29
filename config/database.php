@@ -3,7 +3,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'electrastore');
+define('DB_NAME', 'electrastore1');
 
 // Create connection
 function getConnection() {

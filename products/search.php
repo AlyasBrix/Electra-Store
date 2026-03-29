@@ -36,7 +36,7 @@ if (!empty($search)) {
         <div class="products-grid">
             <?php foreach ($products as $product): ?>
             <div class="product-card">
-                <img src="/electrastore/assets/images/products/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
+                <img src="/app/electrastore/assets/images/products/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
                      alt="<?php echo htmlspecialchars($product['product_name']); ?>"
                      class="product-image">
                 <div class="product-info">

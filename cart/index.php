@@ -2,7 +2,7 @@
 require_once '../includes/header.php';
 
 if (!isLoggedIn()) {
-    header('Location: /electrastore/user/login.php');
+    header('Location: /app/electrastore/user/login.php');
     exit();
 }
 
@@ -39,7 +39,7 @@ foreach ($cart_items as $item) {
                 </div>
                 <h3>Your Cart is Empty</h3>
                 <p>Looks like you haven't added any items to your cart yet.</p>
-                <a href="/electrastore/products/index.php" class="btn btn-primary">
+                <a href="/app/electrastore/products/index.php" class="btn btn-primary">
                     <i class="fas fa-store"></i> Start Shopping
                 </a>
             </div>
@@ -60,7 +60,7 @@ foreach ($cart_items as $item) {
                         <div class="cart-item" id="cart-item-<?php echo $item['cart_item_id']; ?>">
                             <div class="cart-item-product">
                                 <div class="cart-item-image">
-                                    <img src="/electrastore/assets/images/products/<?php echo htmlspecialchars($item['image_url'] ?: 'placeholder.jpg'); ?>" 
+                                    <img src="/app/electrastore/assets/images/products/<?php echo htmlspecialchars($item['image_url'] ?: 'placeholder.jpg'); ?>" 
                                          alt="<?php echo htmlspecialchars($item['product_name']); ?>">
                                 </div>
                                 <div class="cart-item-details">
@@ -97,7 +97,7 @@ foreach ($cart_items as $item) {
                     
                     <!-- Continue Shopping Link -->
                     <div class="continue-shopping">
-                        <a href="/electrastore/products/index.php" class="continue-link">
+                        <a href="/app/electrastore/products/index.php" class="continue-link">
                             <i class="fas fa-arrow-left"></i> Continue Shopping
                         </a>
                     </div>
@@ -146,7 +146,7 @@ foreach ($cart_items as $item) {
                             </span>
                         </div>
                         
-                        <a href="/electrastore/checkout/index.php" class="checkout-btn">
+                        <a href="/app/electrastore/checkout/index.php" class="checkout-btn">
                             <i class="fas fa-lock"></i> Proceed to Checkout
                         </a>
                     </div>
@@ -564,7 +564,7 @@ function updateQuantity(cartItemId, quantity) {
         return;
     }
     
-    fetch('/electrastore/cart/update.php', {
+    fetch('/app/electrastore/cart/update.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -584,7 +584,7 @@ function updateQuantity(cartItemId, quantity) {
 // Remove item function
 function removeItem(cartItemId) {
     if (confirm('Are you sure you want to remove this item from your cart?')) {
-        fetch('/electrastore/cart/remove.php', {
+        fetch('/app/electrastore/cart/remove.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

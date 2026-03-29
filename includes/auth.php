@@ -11,7 +11,7 @@ function isAdmin() {
 
 function requireLogin() {
     if (!isLoggedIn()) {
-        header('Location: /electrastore/user/login.php');
+        header('Location: /app/electrastore/user/login.php');
         exit();
     }
 }
@@ -19,7 +19,7 @@ function requireLogin() {
 function requireAdmin() {
     requireLogin();
     if (!isAdmin()) {
-        header('Location: /electrastore/index.php');
+        header('Location: /app/electrastore/index.php');
         exit();
     }
 }

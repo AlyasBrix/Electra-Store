@@ -31,7 +31,7 @@ $categories = $cat_stmt->fetchAll();
     <div class="container">
         <!-- Page Header -->
         <div class="shop-header">
-            <h1>Our Collection</h1>
+            <h1>Kianth Collection</h1>
             <p>Discover the latest electronics and gadgets</p>
         </div>
         
@@ -45,7 +45,7 @@ $categories = $cat_stmt->fetchAll();
                     </div>
                     <ul class="category-list">
                         <li>
-                            <a href="/electrastore/products/index.php" class="<?php echo $category_id == 0 ? 'active' : ''; ?>">
+                            <a href="/app/electrastore/products/index.php" class="<?php echo $category_id == 0 ? 'active' : ''; ?>">
                                 <i class="fas fa-store"></i>
                                 <span>All Products</span>
                                 <span class="count"><?php echo count($products); ?></span>
@@ -91,7 +91,7 @@ $categories = $cat_stmt->fetchAll();
                     </div>
                     
                     <?php if ($category_id > 0): ?>
-                        <a href="/electrastore/products/index.php" class="clear-filter">
+                        <a href="/app/electrastore/products/index.php" class="clear-filter">
                             <i class="fas fa-times"></i> Clear Filter
                         </a>
                     <?php endif; ?>
@@ -102,14 +102,14 @@ $categories = $cat_stmt->fetchAll();
                         <i class="fas fa-box-open"></i>
                         <h3>No products found</h3>
                         <p>Try adjusting your filter or check back later for new items.</p>
-                        <a href="/electrastore/products/index.php" class="btn btn-primary">View All Products</a>
+                        <a href="/app/electrastore/products/index.php" class="btn btn-primary">View All Products</a>
                     </div>
                 <?php else: ?>
                     <div class="products-grid-enhanced">
                         <?php foreach ($products as $product): ?>
                         <div class="product-card-enhanced">
                             <div class="product-image-wrapper">
-                                <img src="/electrastore/assets/images/products/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
+                                <img src="/app/electrastore/assets/images/products/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
                                      alt="<?php echo htmlspecialchars($product['product_name']); ?>"
                                      class="product-image-enhanced">
                                 <?php if ($product['stock'] <= 0): ?>
@@ -145,7 +145,7 @@ $categories = $cat_stmt->fetchAll();
                                             <i class="fas fa-shopping-cart"></i> Add to Cart
                                         </button>
                                     <?php else: ?>
-                                        <a href="/electrastore/user/login.php" class="add-to-cart-enhanced login-to-buy">
+                                        <a href="/app/electrastore/user/login.php" class="add-to-cart-enhanced login-to-buy">
                                             <i class="fas fa-lock"></i> Login to Buy
                                         </a>
                                     <?php endif; ?>

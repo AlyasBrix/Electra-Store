@@ -30,11 +30,11 @@ $related_products = $related_stmt->fetchAll();
     <div class="container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="/electrastore/index.php">Home</a>
+            <a href="/app/electrastore/index.php">Home</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="/electrastore/products/index.php">Products</a>
+            <a href="/app/electrastore/products/index.php">Products</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="/electrastore/products/index.php?category=<?php echo $product['category_id']; ?>"><?php echo htmlspecialchars($product['category_name']); ?></a>
+            <a href="/app/electrastore/products/index.php?category=<?php echo $product['category_id']; ?>"><?php echo htmlspecialchars($product['category_name']); ?></a>
             <i class="fas fa-chevron-right"></i>
             <span><?php echo htmlspecialchars($product['product_name']); ?></span>
         </div>
@@ -44,14 +44,14 @@ $related_products = $related_stmt->fetchAll();
             <!-- Product Gallery -->
             <div class="product-gallery">
                 <div class="main-image">
-                    <img src="/electrastore/assets/images/products/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
+                    <img src="/app/electrastore/assets/images/products/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
                          alt="<?php echo htmlspecialchars($product['product_name']); ?>"
                          id="mainProductImage">
                 </div>
                 <?php if ($product['image_url']): ?>
                 <div class="thumbnail-list">
                     <div class="thumbnail active">
-                        <img src="/electrastore/assets/images/products/<?php echo $product['image_url']; ?>" 
+                        <img src="/app/electrastore/assets/images/products/<?php echo $product['image_url']; ?>" 
                              alt="<?php echo htmlspecialchars($product['product_name']); ?>"
                              onclick="changeImage(this.src)">
                     </div>
@@ -128,7 +128,7 @@ $related_products = $related_stmt->fetchAll();
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
                         <?php else: ?>
-                            <a href="/electrastore/user/login.php" class="btn-add-to-cart-detail login-required">
+                            <a href="/app/electrastore/user/login.php" class="btn-add-to-cart-detail login-required">
                                 <i class="fas fa-lock"></i> Login to Purchase
                             </a>
                         <?php endif; ?>
@@ -173,7 +173,7 @@ $related_products = $related_stmt->fetchAll();
                 <?php foreach ($related_products as $related): ?>
                 <div class="related-card">
                     <a href="details.php?id=<?php echo $related['product_id']; ?>">
-                        <img src="/electrastore/assets/images/products/<?php echo $related['image_url'] ?: 'placeholder.jpg'; ?>" 
+                        <img src="/app/electrastore/assets/images/products/<?php echo $related['image_url'] ?: 'placeholder.jpg'; ?>" 
                              alt="<?php echo htmlspecialchars($related['product_name']); ?>">
                         <h4><?php echo htmlspecialchars($related['product_name']); ?></h4>
                         <p class="related-price">₱<?php echo number_format($related['price'], 2); ?></p>
@@ -704,7 +704,7 @@ function decrementQty() {
 function addToCartWithQuantity(productId) {
     const quantity = document.getElementById('quantity').value;
     
-    fetch('/electrastore/cart/add.php', {
+    fetch('/app/electrastore/cart/add.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

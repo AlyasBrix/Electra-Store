@@ -1,6 +1,6 @@
 <?php
 session_start();
 session_destroy();
-header('Location: /electrastore/index.php');
+header('Location: /app/electrastore/index.php');
 exit();
 ?>

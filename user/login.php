@@ -2,7 +2,7 @@
 require_once '../includes/header.php';
 
 if (isLoggedIn()) {
-    header('Location: /electrastore/index.php');
+    header('Location: /app/electrastore/index.php');
     exit();
 }
 
@@ -21,15 +21,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch();
         
         if ($user && password_verify($password, $user['password'])) {
+            // Update last login time
+            $update_stmt = $conn->prepare("UPDATE users SET last_login = NOW() WHERE user_id = ?");
+            $update_stmt->execute([$user['user_id']]);
+            
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['full_name'] = $user['full_name'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['role'] = $user['role'];
             
+            // Redirect based on role
             if ($user['role'] === 'admin') {
-                header('Location: /electrastore/admin/index.php');
+                header('Location: /app/electrastore/admin/index.php');
+            } elseif ($user['role'] === 'staff') {
+                header('Location: /app/electrastore/staff/index.php');
             } else {
-                header('Location: /electrastore/index.php');
+                header('Location: /app/electrastore/index.php');
             }
             exit();
         } else {

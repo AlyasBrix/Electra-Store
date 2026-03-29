@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     navLinksItems.forEach(link => {
         const linkPath = link.getAttribute('href');
-        if (linkPath && currentLocation.includes(linkPath) && linkPath !== '/electrastore/index.php') {
+        if (linkPath && currentLocation.includes(linkPath) && linkPath !== '/app/electrastore/index.php') {
             link.classList.add('active');
-        } else if (linkPath === '/electrastore/index.php' && currentLocation === '/electrastore/index.php') {
+        } else if (linkPath === '/app/electrastore/index.php' && currentLocation === '/app/electrastore/index.php') {
             link.classList.add('active');
         }
     });
@@ -39,7 +39,7 @@ function addToCart(productId) {
         addButton.disabled = true;
     }
     
-    fetch('/electrastore/cart/add.php', {
+    fetch('/app/electrastore/cart/add.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -97,7 +97,7 @@ function updateQuantity(cartItemId, quantity) {
         quantityInput.disabled = true;
     }
     
-    fetch('/electrastore/cart/update.php', {
+    fetch('/app/electrastore/cart/update.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -129,7 +129,7 @@ function updateQuantity(cartItemId, quantity) {
 // Remove item from cart
 function removeItem(cartItemId) {
     if (confirm('Are you sure you want to remove this item?')) {
-        fetch('/electrastore/cart/remove.php', {
+        fetch('/app/electrastore/cart/remove.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -182,7 +182,7 @@ function showMessage(message, type) {
 function searchProducts() {
     const searchTerm = document.getElementById('search-input')?.value;
     if (searchTerm && searchTerm.trim()) {
-        window.location.href = '/electrastore/products/search.php?q=' + encodeURIComponent(searchTerm);
+        window.location.href = '/app/electrastore/products/search.php?q=' + encodeURIComponent(searchTerm);
     }
     return false;
 }

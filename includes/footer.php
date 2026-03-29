@@ -11,9 +11,9 @@
                 </div>
                 <div class="footer-section">
                     <h3>Quick Links</h3>
-                    <a href="/electrastore/index.php">Home</a>
-                    <a href="/electrastore/products/index.php">Products</a>
-                    <a href="/electrastore/user/login.php">Login</a>
+                    <a href="/app/electrastore/index.php">Home</a>
+                    <a href="/app/electrastore/products/index.php">Products</a>
+                    <a href="/app/electrastore/user/login.php">Login</a>
                 </div>
                 <div class="footer-section">
                     <h3>Contact Us</h3>
@@ -27,6 +27,6 @@
             </div>
         </div>
     </footer>
-    <script src="/electrastore/assets/js/script.js"></script>
+    <script src="/app/electrastore/assets/js/script.js"></script>
 </body>
 </html>
