@@ -79,7 +79,7 @@ $products = $stmt->fetchAll();
             <tr>
                 <td><?php echo $product['product_id']; ?></td>
                 <td>
-                    <img src="/app/electrastore/assets/images/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
+                    <img src="/app/electrastore/assets/images/products/<?php echo $product['image_url'] ?: 'placeholder.jpg'; ?>" 
                          style="width: 50px; height: 50px; object-fit: cover;">
                 </td>
                 <td><?php echo htmlspecialchars($product['product_name']); ?></td>

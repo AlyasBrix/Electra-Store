@@ -31,7 +31,7 @@ $categories = $cat_stmt->fetchAll();
     <div class="container">
         <!-- Page Header -->
         <div class="shop-header">
-            <h1>Kianth Collection</h1>
+            <h1> Collection</h1>
             <p>Discover the latest electronics and gadgets</p>
         </div>
         
