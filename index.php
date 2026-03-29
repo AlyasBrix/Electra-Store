@@ -150,23 +150,6 @@ $products = $stmt->fetchAll();
     </div>
 </section>
 
-<!-- Newsletter Section -->
-<section class="newsletter-section">
-    <div class="container">
-        <div class="newsletter-content">
-            <div class="newsletter-text">
-                <i class="fas fa-envelope"></i>
-                <h3>Subscribe to Our Newsletter</h3>
-                <p>Get the latest updates on new products and exclusive offers</p>
-            </div>
-            <form class="newsletter-form" action="#" method="POST">
-                <input type="email" placeholder="Enter your email address" required>
-                <button type="submit">Subscribe <i class="fas fa-paper-plane"></i></button>
-            </form>
-        </div>
-    </div>
-</section>
-
 <style>
 /* Hero Section Modern */
 .hero-modern {

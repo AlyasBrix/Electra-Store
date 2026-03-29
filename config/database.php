@@ -21,4 +21,37 @@ function getConnection() {
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Check if user is logged in
+function isLoggedIn() {
+    return isset($_SESSION['user_id']);
+}
+
+// Get user's cart ID
+function getUserCartId($user_id) {
+    $conn = getConnection();
+    
+    $stmt = $conn->prepare("SELECT cart_id FROM cart WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $cart = $stmt->fetch();
+    
+    if ($cart) {
+        return $cart['cart_id'];
+    }
+    
+    $stmt = $conn->prepare("INSERT INTO cart (user_id) VALUES (?)");
+    $stmt->execute([$user_id]);
+    return $conn->lastInsertId();
+}
+
+// Get cart item count
+function getCartItemCount($user_id) {
+    $cart_id = getUserCartId($user_id);
+    $conn = getConnection();
+    
+    $stmt = $conn->prepare("SELECT SUM(quantity) as total FROM cart_items WHERE cart_id = ?");
+    $stmt->execute([$cart_id]);
+    $result = $stmt->fetch();
+    return $result['total'] ?? 0;
+}
 ?>
