@@ -204,8 +204,7 @@ if (isset($_GET['edit'])) {
                             <th>Products</th>
                             <th>Created Date</th>
                             <th>Actions</th>
-                        </tr>
-                    </thead>
+                        </thead>
                     <tbody>
                         <?php foreach ($categories as $category): ?>
                         <tr>
@@ -302,8 +301,8 @@ if (isset($_GET['edit'])) {
     </div>
 </div>
 
-<!-- Add Category Modal -->
-<div id="addCategoryModal" class="modal">
+<!-- Add Category Modal (Only appears when button is clicked) -->
+<div id="addCategoryModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
             <h2>
@@ -343,7 +342,7 @@ if (isset($_GET['edit'])) {
     </div>
 </div>
 
-<!-- Edit Category Modal -->
+<!-- Edit Category Modal (Only appears when Edit is clicked) -->
 <?php if ($edit_category): ?>
 <div id="editCategoryModal" class="modal show">
     <div class="modal-content">

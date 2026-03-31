@@ -12,13 +12,6 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
 
 require_once '../config/database.php';
 
-// Try to include mail config, but don't fail if it's not there
-$mail_available = false;
-if (file_exists('../includes/mail_config.php')) {
-    require_once '../includes/mail_config.php';
-    $mail_available = true;
-}
-
 $conn = getConnection();
 
 // Update order status with email notification
@@ -36,39 +29,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     
     // Send email notification if status changed to Completed
     if ($status == 'Completed' && $old_status != 'Completed') {
-        if ($mail_available && function_exists('sendOrderEmail')) {
-            // Get user details
-            $user_stmt = $conn->prepare("SELECT o.*, u.email, u.full_name 
-                                         FROM orders o 
-                                         JOIN users u ON o.user_id = u.user_id 
-                                         WHERE o.order_id = ?");
-            $user_stmt->execute([$order_id]);
-            $order_data = $user_stmt->fetch();
-            
-            // Get order items
-            $items_stmt = $conn->prepare("SELECT oi.*, p.product_name, p.image_url 
-                                          FROM order_items oi 
-                                          JOIN products p ON oi.product_id = p.product_id 
-                                          WHERE oi.order_id = ?");
-            $items_stmt->execute([$order_id]);
-            $order_items = $items_stmt->fetchAll();
-            
-            // Send email using PHPMailer
-            try {
-                if (sendOrderEmail($order_data['email'], $order_data['full_name'], $order_id, $order_data['total_amount'], $order_items)) {
-                    $_SESSION['message'] = "Order status updated to Completed! Email notification sent to customer.";
-                    $_SESSION['message_type'] = 'success';
-                } else {
-                    $_SESSION['message'] = "Order status updated to Completed, but email notification failed to send. Please check mail configuration.";
-                    $_SESSION['message_type'] = 'warning';
-                }
-            } catch (Exception $e) {
-                $_SESSION['message'] = "Order status updated to Completed, but email failed: " . $e->getMessage();
-                $_SESSION['message_type'] = 'warning';
-            }
-        } else {
-            $_SESSION['message'] = "Order status updated to Completed! (Email notification not configured)";
+        // Get user details
+        $user_stmt = $conn->prepare("SELECT o.*, u.email, u.full_name 
+                                     FROM orders o 
+                                     JOIN users u ON o.user_id = u.user_id 
+                                     WHERE o.order_id = ?");
+        $user_stmt->execute([$order_id]);
+        $order_data = $user_stmt->fetch();
+        
+        // Get order items
+        $items_stmt = $conn->prepare("SELECT oi.*, p.product_name, p.image_url 
+                                      FROM order_items oi 
+                                      JOIN products p ON oi.product_id = p.product_id 
+                                      WHERE oi.order_id = ?");
+        $items_stmt->execute([$order_id]);
+        $order_items = $items_stmt->fetchAll();
+        
+        // Send email using the function from database.php
+        $email_sent = sendOrderEmail($order_data['email'], $order_data['full_name'], $order_id, $order_data['total_amount'], $order_items);
+        
+        if ($email_sent) {
+            $_SESSION['message'] = "Order status updated to Completed! Email notification sent to customer.";
             $_SESSION['message_type'] = 'success';
+        } else {
+            $_SESSION['message'] = "Order status updated to Completed, but email notification failed to send.";
+            $_SESSION['message_type'] = 'warning';
         }
     } else {
         $_SESSION['message'] = "Order status updated successfully!";
@@ -125,6 +110,7 @@ require_once '../includes/header.php';
 requireAdmin();
 ?>
 
+<!-- REST OF YOUR HTML CODE REMAINS THE SAME - KEEP ALL YOUR EXISTING HTML AND CSS -->
 <div class="orders-admin">
     <div class="container">
         <!-- Page Header -->
@@ -265,16 +251,16 @@ requireAdmin();
                     <div class="table-responsive">
                         <table class="order-items-table">
                             <thead>
-                                <tr>
+                                 <tr>
                                     <th>Product</th>
                                     <th>Quantity</th>
                                     <th>Unit Price</th>
                                     <th>Subtotal</th>
-                                </tr>
+                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($order_items as $item): ?>
-                                <tr>
+                                 <tr>
                                     <td class="product-cell">
                                         <div class="product-info-order">
                                             <div class="product-image-order">
@@ -283,11 +269,11 @@ requireAdmin();
                                             </div>
                                             <span><?php echo htmlspecialchars($item['product_name']); ?></span>
                                         </div>
-                                    </td>
+                                     </td>
                                     <td class="quantity-cell">x<?php echo $item['quantity']; ?></td>
                                     <td class="price-cell">₱<?php echo number_format($item['price'], 2); ?></td>
                                     <td class="subtotal-cell">₱<?php echo number_format($item['price'] * $item['quantity'], 2); ?></td>
-                                </tr>
+                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
                             <tfoot>
@@ -354,18 +340,18 @@ requireAdmin();
                 <div class="orders-table-wrapper">
                     <table class="orders-table">
                         <thead>
-                            <tr>
+                             <tr>
                                 <th>Order ID</th>
                                 <th>Customer</th>
                                 <th>Total</th>
                                 <th>Status</th>
                                 <th>Date</th>
                                 <th>Action</th>
-                            </tr>
+                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($orders as $order): ?>
-                            <tr>
+                             <tr>
                                 <td class="order-id">#<?php echo str_pad($order['order_id'], 6, '0', STR_PAD_LEFT); ?></td>
                                 <td class="customer-name">
                                     <i class="fas fa-user-circle"></i>
@@ -391,7 +377,7 @@ requireAdmin();
                                         <i class="fas fa-eye"></i> View Details
                                     </a>
                                 </td>
-                            </tr>
+                             </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -402,6 +388,7 @@ requireAdmin();
 </div>
 
 <style>
+/* Keep all your existing CSS styles - they are the same */
 .orders-admin {
     padding: 2rem 0;
     background: linear-gradient(135deg, #f5f7fa 0%, #f8fafc 100%);

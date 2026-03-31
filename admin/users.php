@@ -394,7 +394,7 @@ requireAdmin();
 </div>
 
 <!-- Add User Modal -->
-<div id="addUserModal" class="modal">
+<div id="addUserModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
             <h2>
