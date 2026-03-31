@@ -25,7 +25,7 @@ $products = $stmt->fetchAll();
             </p>
             <div class="hero-buttons">
                 <a href="/app/electrastore/products/index.php" class="btn-hero-primary">
-                    <i class="fas fa-shopping-bag"></i> Shop Now
+                    <i class="fas fa-shopping-bag"></i> Shop Now!
                 </a>
             </div>
             <div class="hero-stats">
