@@ -28,6 +28,18 @@ $orders = $stmt->fetchAll();
             </div>
         <?php endif; ?>
         
+        <!-- Cancel/Error Messages -->
+        <?php if (isset($_SESSION['cancel_message'])): ?>
+            <div class="alert-message <?php echo $_SESSION['cancel_message_type']; ?>">
+                <i class="fas <?php echo $_SESSION['cancel_message_type'] == 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'; ?>"></i>
+                <?php 
+                echo htmlspecialchars($_SESSION['cancel_message']);
+                unset($_SESSION['cancel_message']);
+                unset($_SESSION['cancel_message_type']);
+                ?>
+            </div>
+        <?php endif; ?>
+        
         <?php if (count($orders) == 0): ?>
             <div class="empty-orders">
                 <div class="empty-icon">
@@ -152,6 +164,12 @@ $orders = $stmt->fetchAll();
                             <button class="btn-outline-small" onclick="toggleOrderDetails(<?php echo $order['order_id']; ?>)">
                                 <i class="fas fa-chevron-down"></i> View Details
                             </button>
+                            
+                            <?php if ($order['order_status'] == 'Pending' || $order['order_status'] == 'Processing'): ?>
+                            <button class="btn-cancel-order" onclick="confirmCancel(<?php echo $order['order_id']; ?>)">
+                                <i class="fas fa-times-circle"></i> Cancel Order
+                            </button>
+                            <?php endif; ?>
                         </div>
                     </div>
                     
@@ -215,7 +233,39 @@ $orders = $stmt->fetchAll();
     font-size: 1rem;
 }
 
-/* Empty State */
+.success-message {
+    background: #d1fae5;
+    color: #059669;
+    border-left: 4px solid #059669;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-message {
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-message.success {
+    background: #d1fae5;
+    color: #059669;
+    border-left: 4px solid #059669;
+}
+
+.alert-message.error {
+    background: #fee2e2;
+    color: #dc2626;
+    border-left: 4px solid #dc2626;
+}
+
 .empty-orders {
     text-align: center;
     padding: 4rem 2rem;
@@ -241,7 +291,6 @@ $orders = $stmt->fetchAll();
     margin-bottom: 1.5rem;
 }
 
-/* Orders List */
 .orders-list {
     display: flex;
     flex-direction: column;
@@ -260,7 +309,6 @@ $orders = $stmt->fetchAll();
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-/* Order Header */
 .order-header {
     display: flex;
     justify-content: space-between;
@@ -322,7 +370,6 @@ $orders = $stmt->fetchAll();
     color: #dc2626;
 }
 
-/* Order Items Table */
 .order-items {
     padding: 1.5rem;
 }
@@ -406,7 +453,6 @@ $orders = $stmt->fetchAll();
     font-size: 1.2rem;
 }
 
-/* Order Footer */
 .order-footer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -449,6 +495,7 @@ $orders = $stmt->fetchAll();
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 0.5rem;
 }
 
 .btn-outline-small {
@@ -468,7 +515,23 @@ $orders = $stmt->fetchAll();
     color: white;
 }
 
-/* Extended Details */
+.btn-cancel-order {
+    padding: 0.5rem 1rem;
+    background: #fee2e2;
+    border: 1px solid #dc2626;
+    color: #dc2626;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel-order:hover {
+    background: #dc2626;
+    color: white;
+}
+
 .order-extended-details {
     padding: 1.5rem;
     background: #f1f5f9;
@@ -510,7 +573,6 @@ $orders = $stmt->fetchAll();
     color: #1e2a3e;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .orders-wrapper {
         padding: 1rem 0;
@@ -546,6 +608,7 @@ $orders = $stmt->fetchAll();
     
     .order-actions {
         justify-content: flex-start;
+        flex-wrap: wrap;
     }
     
     .info-grid {
@@ -604,6 +667,12 @@ function toggleOrderDetails(orderId) {
         detailsDiv.style.display = 'none';
         icon.classList.remove('fa-chevron-up');
         icon.classList.add('fa-chevron-down');
+    }
+}
+
+function confirmCancel(orderId) {
+    if (confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+        window.location.href = '/app/electrastore/user/cancel_order.php?id=' + orderId;
     }
 }
 </script>
