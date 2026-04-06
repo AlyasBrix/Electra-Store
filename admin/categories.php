@@ -129,9 +129,9 @@ $stmt = $conn->prepare("SELECT c.*, COUNT(p.product_id) as product_count
 $stmt->execute();
 $categories = $stmt->fetchAll();
 
-// Get category for editing
+// Get category for editing - ONLY when edit parameter is present
 $edit_category = null;
-if (isset($_GET['edit'])) {
+if (isset($_GET['edit']) && !empty($_GET['edit'])) {
     $category_id = (int)$_GET['edit'];
     $stmt = $conn->prepare("SELECT * FROM categories WHERE category_id = ?");
     $stmt->execute([$category_id]);
@@ -301,7 +301,7 @@ if (isset($_GET['edit'])) {
     </div>
 </div>
 
-<!-- Add Category Modal (Only appears when button is clicked) -->
+<!-- Add Category Modal -->
 <div id="addCategoryModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
@@ -342,7 +342,7 @@ if (isset($_GET['edit'])) {
     </div>
 </div>
 
-<!-- Edit Category Modal (Only appears when Edit is clicked) -->
+<!-- Edit Category Modal -->
 <?php if ($edit_category): ?>
 <div id="editCategoryModal" class="modal show">
     <div class="modal-content">
@@ -382,9 +382,14 @@ if (isset($_GET['edit'])) {
                 ?>
                 
                 <?php if ($product_count > 0): ?>
-                <div class="warning-note">
-                    <i class="fas fa-info-circle"></i>
-                    This category has <strong><?php echo $product_count; ?> product(s)</strong>. Changing the category name will affect these products.
+                <div class="warning-note-category">
+                    <div class="warning-icon-category">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="warning-content-category">
+                        <strong>⚠️ Warning: Category has products</strong>
+                        <p>This category has <strong><?php echo $product_count; ?> product(s)</strong>. Changing the category name will affect these products.</p>
+                    </div>
                 </div>
                 <?php endif; ?>
             </div>
@@ -745,6 +750,7 @@ if (isset($_GET['edit'])) {
     margin-bottom: 1.5rem;
 }
 
+/* Modal Styles */
 .modal {
     position: fixed;
     top: 0;
@@ -753,7 +759,7 @@ if (isset($_GET['edit'])) {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
 }
@@ -767,6 +773,8 @@ if (isset($_GET['edit'])) {
     border-radius: 24px;
     max-width: 500px;
     width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
     animation: modalSlideIn 0.3s ease;
 }
 
@@ -787,6 +795,10 @@ if (isset($_GET['edit'])) {
     align-items: center;
     padding: 1.5rem;
     border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    background: white;
+    border-radius: 24px 24px 0 0;
 }
 
 .modal-header h2 {
@@ -796,6 +808,7 @@ if (isset($_GET['edit'])) {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin: 0;
 }
 
 .modal-header h2 i {
@@ -809,6 +822,7 @@ if (isset($_GET['edit'])) {
     cursor: pointer;
     color: #64748b;
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 .modal-close:hover {
@@ -824,8 +838,12 @@ if (isset($_GET['edit'])) {
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
+    border-top: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 0 0 24px 24px;
 }
 
+/* Form Group Styles */
 .form-group {
     margin-bottom: 1rem;
 }
@@ -838,14 +856,21 @@ if (isset($_GET['edit'])) {
     font-size: 0.85rem;
 }
 
+.form-group label i {
+    margin-right: 6px;
+    color: #4361ee;
+}
+
 .form-group input,
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: 0.7rem;
+    padding: 0.75rem;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     font-family: inherit;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
 }
 
 .form-group input:focus,
@@ -853,8 +878,77 @@ if (isset($_GET['edit'])) {
 .form-group select:focus {
     outline: none;
     border-color: #4361ee;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
 }
 
+/* Warning Note for Edit Category */
+.warning-note-category {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.warning-icon-category {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: #fef3c7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.warning-icon-category i {
+    font-size: 1.2rem;
+    color: #f59e0b;
+}
+
+.warning-content-category {
+    flex: 1;
+}
+
+.warning-content-category strong {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #92400e;
+    margin-bottom: 0.25rem;
+}
+
+.warning-content-category p {
+    font-size: 0.8rem;
+    color: #b45309;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.warning-content-category p strong {
+    display: inline;
+    font-weight: 700;
+    color: #dc2626;
+}
+
+/* Modal Body Form Group Spacing */
+.modal-body .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.modal-body .form-group:last-of-type {
+    margin-bottom: 0;
+}
+
+.modal-body textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Button Styles */
 .btn-submit {
     padding: 0.7rem 1.5rem;
     background: linear-gradient(135deg, #4361ee, #7209b7);
@@ -864,6 +958,9 @@ if (isset($_GET['edit'])) {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-submit:hover {
@@ -881,6 +978,9 @@ if (isset($_GET['edit'])) {
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-cancel:hover {
@@ -888,18 +988,7 @@ if (isset($_GET['edit'])) {
     color: #1e2a3e;
 }
 
-.warning-note {
-    background: #fef3c7;
-    padding: 0.75rem;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    color: #d97706;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 1rem;
-}
-
+/* Responsive */
 @media (max-width: 768px) {
     .categories-admin {
         padding: 1rem 0;
@@ -924,6 +1013,63 @@ if (isset($_GET['edit'])) {
     
     .modal-content {
         width: 95%;
+        max-height: 95vh;
+    }
+    
+    .modal-header {
+        padding: 1rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .modal-footer {
+        padding: 1rem;
+        flex-direction: column;
+    }
+    
+    .btn-submit,
+    .btn-cancel {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .warning-note-category {
+        padding: 0.75rem;
+    }
+    
+    .warning-content-category strong {
+        font-size: 0.8rem;
+    }
+    
+    .warning-content-category p {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .header-right {
+        width: 100%;
+    }
+    
+    .btn-add-category {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .category-name-wrapper {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .actions {
+        justify-content: center;
     }
 }
 </style>

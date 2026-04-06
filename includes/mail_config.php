@@ -11,24 +11,24 @@ function sendOrderEmail($to_email, $to_name, $order_id, $order_total, $order_ite
     $mail = new PHPMailer(true);
     
     try {
-        // Enable verbose debug output for testing (change to DEBUG_OFF after working)
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;  // Shows detailed errors
-        $mail->Debugoutput = 'html';
+        // Turn OFF all debugging to prevent header issues
+        $mail->SMTPDebug = 0; // 0 = OFF
+        $mail->Debugoutput = function($str, $level) {
+            // Do nothing - suppress all output
+        };
         
         // Server settings
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'kd.aligsao@gmail.com';  // YOUR GMAIL - CHANGE THIS
-        $mail->Password   = 'bpgh yobz nyec fimj';     // YOUR APP PASSWORD - CHANGE THIS
+        $mail->Username   = 'kd.aligsao@gmail.com';
+        $mail->Password   = 'bpghyobznyecfimj'; // Your App Password (no spaces)
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
-        
-        // Timeout settings
-        $mail->Timeout = 30;
+        $mail->Timeout    = 30;
         
         // Recipients
-        $mail->setFrom('kd.aligsao@gmail.com', 'ElectraStore');  // Same as username
+        $mail->setFrom('kd.aligsao@gmail.com', 'ElectraStore');
         $mail->addAddress($to_email, $to_name);
         
         // Content
@@ -108,7 +108,7 @@ function sendOrderEmail($to_email, $to_name, $order_id, $order_total, $order_ite
         $mail->send();
         return true;
     } catch (Exception $e) {
-        error_log("Email failed to send: " . $mail->ErrorInfo);
+        error_log("Order email failed: " . $mail->ErrorInfo);
         return false;
     }
 }

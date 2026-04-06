@@ -177,9 +177,9 @@ $stmt = $conn->prepare("SELECT * FROM users ORDER BY role, full_name");
 $stmt->execute();
 $users = $stmt->fetchAll();
 
-// Get user for editing
+// Get user for editing - ONLY when edit parameter is present
 $edit_user = null;
-if (isset($_GET['edit'])) {
+if (isset($_GET['edit']) && !empty($_GET['edit'])) {
     $user_id = (int)$_GET['edit'];
     $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
     $stmt->execute([$user_id]);
@@ -471,7 +471,7 @@ requireAdmin();
     </div>
 </div>
 
-<!-- Edit User Modal -->
+<!-- Edit User Modal - Only show when edit_user exists -->
 <?php if ($edit_user): ?>
 <div id="editUserModal" class="modal show">
     <div class="modal-content">
@@ -973,6 +973,7 @@ requireAdmin();
     color: #64748b;
 }
 
+/* Modal Styles */
 .modal {
     position: fixed;
     top: 0;
@@ -1029,6 +1030,7 @@ requireAdmin();
     display: flex;
     align-items: center;
     gap: 8px;
+    margin: 0;
 }
 
 .modal-header h2 i {

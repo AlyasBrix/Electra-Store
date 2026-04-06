@@ -11,6 +11,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
 }
 
 require_once '../config/database.php';
+require_once '../includes/mail_config.php'; // ADD THIS LINE
 
 $conn = getConnection();
 
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
         $items_stmt->execute([$order_id]);
         $order_items = $items_stmt->fetchAll();
         
-        // Send email using the function from database.php
+        // Send email using the function from mail_config.php
         $email_sent = sendOrderEmail($order_data['email'], $order_data['full_name'], $order_id, $order_data['total_amount'], $order_items);
         
         if ($email_sent) {
@@ -110,7 +111,6 @@ require_once '../includes/header.php';
 requireAdmin();
 ?>
 
-<!-- REST OF YOUR HTML CODE REMAINS THE SAME - KEEP ALL YOUR EXISTING HTML AND CSS -->
 <div class="orders-admin">
     <div class="container">
         <!-- Page Header -->
@@ -340,18 +340,17 @@ requireAdmin();
                 <div class="orders-table-wrapper">
                     <table class="orders-table">
                         <thead>
-                             <tr>
+                            <tr>
                                 <th>Order ID</th>
                                 <th>Customer</th>
                                 <th>Total</th>
                                 <th>Status</th>
                                 <th>Date</th>
                                 <th>Action</th>
-                             </tr>
-                        </thead>
+                            </thead>
                         <tbody>
                             <?php foreach ($orders as $order): ?>
-                             <tr>
+                            <tr>
                                 <td class="order-id">#<?php echo str_pad($order['order_id'], 6, '0', STR_PAD_LEFT); ?></td>
                                 <td class="customer-name">
                                     <i class="fas fa-user-circle"></i>
@@ -377,7 +376,7 @@ requireAdmin();
                                         <i class="fas fa-eye"></i> View Details
                                     </a>
                                 </td>
-                             </tr>
+                            </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -388,7 +387,6 @@ requireAdmin();
 </div>
 
 <style>
-/* Keep all your existing CSS styles - they are the same */
 .orders-admin {
     padding: 2rem 0;
     background: linear-gradient(135deg, #f5f7fa 0%, #f8fafc 100%);
@@ -820,11 +818,6 @@ requireAdmin();
     font-weight: 600;
     color: #1e2a3e;
     margin: 0;
-}
-
-.status-form {
-    display: flex;
-    align-items: center;
 }
 
 .status-select-wrapper {
